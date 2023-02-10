@@ -26,8 +26,29 @@ void linear_calibration_curve(const vector<double> &x, const vector<double> &y, 
 }
 
 int main() {
-  vector<double> x = {1, 2, 3, 4, 5};
-  vector<double> y = {2, 4, 6, 8, 10};
+
+  //the user adds the data
+  //Data number
+  int n;
+  cout << "Enter the number of data points: ";
+  cin >> n;
+
+  vector<double> x(n);
+  vector<double> y(n);
+
+  cout << "Enter the independent variable x data points: " << endl;
+  for (int i = 0; i < n; i++) {
+    cout << "x[" << i << "] = ";
+    cin >> x[i];
+  }
+
+  cout << "\n";
+
+  cout << "Enter the dependent variable y data points: " << endl;
+  for (int i = 0; i < n; i++) {
+    cout << "y[" << i << "] = ";
+    cin >> y[i];
+  }
 
   double a, b;
   linear_calibration_curve(x, y, a, b);
