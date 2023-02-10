@@ -48,12 +48,14 @@ int main() {
 
   //the user adds the data
   //Data number
-  int n;
+  int n, m;
+
   cout << "Enter the number of data points: ";
   cin >> n;
 
   vector<double> x(n);
   vector<double> y(n);
+  vector<double> samples(n);
 
   cout << "Enter the independent variable x data points: " << endl;
   for (int i = 0; i < n; i++) {
@@ -76,6 +78,16 @@ int main() {
   
   double r_sq = r_squared(x, y, a, b);
   cout << "The R-squared value is: " << r_sq << endl;
+
+
+  //use the calibration curve to calculate the independent
+  //(like the concentration) variable in the samples 
+  cout << "Number of samples: "; cin >> m;
+  cout << "Enter the data of the samples: " << endl;
+  for (int i = 0; i < m; i++) {
+     cout << "y[" << i << "] = ";
+     cin >> y[i];
+  }
 
   return 0;
 }
