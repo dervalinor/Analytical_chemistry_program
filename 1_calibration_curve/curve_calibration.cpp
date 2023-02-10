@@ -25,6 +25,25 @@ void linear_calibration_curve(const vector<double> &x, const vector<double> &y, 
   b = (sum_y - a * sum_x) / n;
 }
 
+double r_squared(const vector<double> &x, const vector<double> &y, double a, double b) {
+  int n = x.size();
+
+  double sum_y = 0, sum_yy = 0, sum_residual = 0;
+  for (int i = 0; i < n; i++) {
+    sum_y += y[i];
+    sum_yy += y[i] * y[i];
+    double y_pred = a * x[i] + b;
+    sum_residual += (y[i] - y_pred) * (y[i] - y_pred);
+  }
+
+  double y_mean = sum_y / n;
+  double ss_total = sum_yy - n * y_mean * y_mean;
+  double ss_residual = sum_residual;
+  double r_squared = 1 - ss_residual / ss_total;
+
+  return r_squared;
+}
+
 int main() {
 
   //the user adds the data
@@ -55,5 +74,8 @@ int main() {
 
   cout << "The calibration curve is: y = " << a << "x + " << b << endl;
   
+  double r_sq = r_squared(x, y, a, b);
+  cout << "The R-squared value is: " << r_sq << endl;
+
   return 0;
 }
