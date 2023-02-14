@@ -44,6 +44,16 @@ double r_squared(const vector<double> &x, const vector<double> &y, double a, dou
   return r_squared;
 }
 
+//if the values are within the calibration curve then: 
+vector<double> calibrate(const vector<double> &samples, double a, double b) {
+  int n = samples.size();
+  vector<double> result(n);
+  for (int i = 0; i < n; i++) {
+    result[i] = (samples[i] - b) / a;
+  }
+  return result;
+}
+
 int main() {
 
   //the user adds the data
@@ -86,8 +96,21 @@ int main() {
   cout << "Enter the data of the samples: " << endl;
   for (int i = 0; i < m; i++) {
      cout << "y[" << i << "] = ";
-     cin >> y[i];
+     cin >> samples[i];
   }
+
+  //whether the values in a samples vector are within 
+  //a tolerance of the values predicted 
+  //by the linear calibration curve
+
+  cout <<"\n";
+
+  vector<double> calibrated = calibrate(samples, a, b);
+  cout << "Calibrated values of the samples: ";
+  for (int i = 0; i < calibrated.size(); i++) {
+    cout << calibrated[i] << " ";
+  }
+  cout << endl;
 
   return 0;
 }
