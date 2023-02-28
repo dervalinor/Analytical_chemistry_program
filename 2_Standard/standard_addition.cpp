@@ -48,6 +48,11 @@ double calculate_x(double a, double b) {
     return cx;
 }
 
+// Dissolution function c1v1 = c2v2
+double dissolution_function(double c1, double v1, double v2) {
+  double c2 = c1 * v1 / v2;
+  return c2;
+}
 
 
 int main() {
@@ -55,10 +60,13 @@ int main() {
   //the user adds the data
   //Data number
   int n;
+  double c1;
 
+  cout << "Standard concentration: "; cin >> c1;
   cout << "Enter the number of data points: ";
   cin >> n;
 
+  vector<double> v(n);
   vector<double> x(n);
   vector<double> y(n);
   vector<double> samples(n);
@@ -67,8 +75,8 @@ int main() {
   //n volumenes and create function dilutions c1v1 = c2v2
   cout << "Volumen standard: " << endl;
   for (int i = 0; i < n; i++) {
-    cout << "x[" << i << "] = ";
-    cin >> x[i];
+    cout << "v[" << i << "] = ";
+    cin >> v[i];
   }
 
   cout << "\n";
@@ -78,6 +86,10 @@ int main() {
     cout << "y[" << i << "] = ";
     cin >> y[i];
   }
+
+  //create a standard concentration values function and
+  //absorbance
+  
 
   double a, b;
   linear_calibration_curve(x, y, a, b);
