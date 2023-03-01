@@ -60,9 +60,10 @@ int main() {
   //the user adds the data
   //Data number
   int n;
-  double c1;
+  double c1, v1, v2;
 
   cout << "Standard concentration: "; cin >> c1;
+  cout << "Volume of aliquot for each standard: "; cin >> v2;
   cout << "Enter the number of data points: ";
   cin >> n;
 
@@ -89,7 +90,11 @@ int main() {
 
   //create a standard concentration values function and
   //absorbance
-  
+  for(int i = 0; i < n; i ++){
+    v1 = v[i];
+    x[i] = dissolution_function(c1, v1, v2);
+    cout << "Standard concentration: " << endl;
+  }  
 
   double a, b;
   linear_calibration_curve(x, y, a, b);
