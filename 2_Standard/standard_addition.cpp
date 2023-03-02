@@ -60,12 +60,12 @@ int main() {
   //the user adds the data
   //Data number
   int n;
-  double c1, v1, v2;
+  double c1, v1, v2, vx, vt;
 
   cout << "Standard concentration: "; cin >> c1;
-  cout << "Volume of aliquot for each standard: "; cin >> v2;
-  cout << "Enter the number of data points: ";
-  cin >> n;
+  cout << "Volume of aliquot for the sample: "; cin >> vx;
+  cout << "Total volume: "; cin >> v2;
+  cout << "Number of points for the calibration curve: "; cin >> n;
 
   vector<double> v(n);
   vector<double> x(n);
@@ -93,8 +93,15 @@ int main() {
   for(int i = 0; i < n; i ++){
     v1 = v[i];
     x[i] = dissolution_function(c1, v1, v2);
-    cout << "Standard concentration: " << endl;
   }  
+
+  cout << "Standard concentration values vs Absorbance: \n";
+
+  for(int i = 0; i < n; i ++){
+    cout << x[i] << " " << y[i] << endl;
+  }
+
+  cout << "\n";
 
   double a, b;
   linear_calibration_curve(x, y, a, b);
@@ -105,8 +112,9 @@ int main() {
   cout << "The R-squared value is: " << r_sq << endl;
 
   //create a function where extrapolation y = 0 then x = - b/a
-
   double x_extrapolation = calculate_x(a, b);
+  //c1 = c2v2/v1
+  cout << "Sample aliquot concentration: " << -x_extrapolation*v2/vx << endl;
 
   return 0;
 }
