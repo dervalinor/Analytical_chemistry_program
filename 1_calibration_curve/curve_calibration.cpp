@@ -54,6 +54,26 @@ vector<double> calibrate(const vector<double> &samples, double a, double b) {
   return result;
 }
 
+
+//function  Validation checks whether it is within the values of the calibration or not.
+//remember we calculate concentration from absorbance
+bool validate_sample(double sample, const vector<double> &x, double tolerance) {
+  double min_x = *min_element(x.begin(), x.end());
+  double max_x = *max_element(x.begin(), x.end());
+  double y_pred_min = a * min_x + b;
+  double y_pred_max = a * max_x + b;
+  double y_pred = a * sample + b;
+
+  double lower_bound = min(y_pred_min, y_pred_max) - tolerance;
+  double upper_bound = max(y_pred_min, y_pred_max) + tolerance;
+
+  if (y_pred < lower_bound || y_pred > upper_bound) {
+    return false;
+  }
+  return true;
+}
+
+
 int main() {
 
   //the user adds the data
@@ -102,6 +122,8 @@ int main() {
   //whether the values in a samples vector are within 
   //a tolerance of the values predicted 
   //by the linear calibration curve
+
+ 
 
   cout <<"\n";
 
