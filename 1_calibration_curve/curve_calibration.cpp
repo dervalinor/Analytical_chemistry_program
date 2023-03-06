@@ -6,6 +6,7 @@ calculate the concentration of a set of samples*/
 #include <iostream>
 #include <vector>
 #include <cmath>  
+#include <algorithm>
 
 using namespace std;
 
@@ -45,32 +46,31 @@ double r_squared(const vector<double> &x, const vector<double> &y, double a, dou
 }
 
 //if the values are within the calibration curve then: 
-vector<double> calibrate(const vector<double> &samples, double a, double b) {
-  int n = samples.size();
-  vector<double> result(n);
-  for (int i = 0; i < n; i++) {
-    result[i] = (samples[i] - b) / a;
-  }
+double calibrate(double &sample, double a, double b){
+  double result; 
+  result = (sample - b) / a;
   return result;
 }
 
 
 //function  Validation checks whether it is within the values of the calibration or not.
 //remember we calculate concentration from absorbance
-bool validate_sample(double sample, const vector<double> &x, double tolerance) {
-  double min_x = *min_element(x.begin(), x.end());
-  double max_x = *max_element(x.begin(), x.end());
-  double y_pred_min = a * min_x + b;
-  double y_pred_max = a * max_x + b;
-  double y_pred = a * sample + b;
+//first find the maximum and minimum value
+void min_max(const std::vector<double>& v, double& min_val, double& max_val) {
+    if (v.empty()) {
+        return;
+    }
 
-  double lower_bound = min(y_pred_min, y_pred_max) - tolerance;
-  double upper_bound = max(y_pred_min, y_pred_max) + tolerance;
+    min_val = *min_element(v.begin(), v.end());
+    max_val = *max_element(v.begin(), v.end());
+}
 
-  if (y_pred < lower_bound || y_pred > upper_bound) {
-    return false;
-  }
-  return true;
+bool validate_sample(double sample, double a, double b, double min_concentration, double max_concentration) {
+  // Calculate the predicted concentration from the absorbance value
+  double concentration = (sample - b) / a;
+
+  // Check if the predicted concentration is within the specified range
+  return (concentration >= min_concentration) && (concentration <= max_concentration);
 }
 
 
@@ -79,7 +79,9 @@ int main() {
   //the user adds the data
   //Data number
   int n, m;
-
+  double  min_val, max_val, sample;
+  double calibrated;
+  
   cout << "Enter the number of data points: ";
   cin >> n;
 
@@ -122,17 +124,26 @@ int main() {
   //whether the values in a samples vector are within 
   //a tolerance of the values predicted 
   //by the linear calibration curve
-
+  //Note: find the values min and max of the concentration
  
-
+  min_max(samples, min_val, max_val);
+    
+  //traverse the entire sample vector cycle
+  for(int i = 0; i < m; i ++){
+    sample = samples[i];  
+    //validate each sample
+    if(validate_sample(sample, a, b, min_val, max_val) == true){
+      calibrated = calibrate(sample, a, b);
+      cout << "sample [" << i << "]" << calibrated << endl;
+    } else {
+      cout << "Out of range" << endl;
+    }
+    
+  }
   cout <<"\n";
 
-  vector<double> calibrated = calibrate(samples, a, b);
-  cout << "Calibrated values of the samples: ";
-  for (int i = 0; i < calibrated.size(); i++) {
-    cout << calibrated[i] << " ";
-  }
-  cout << endl;
+  
+
 
   return 0;
 }

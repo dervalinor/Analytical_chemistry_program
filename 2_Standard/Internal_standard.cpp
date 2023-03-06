@@ -126,6 +126,8 @@ int main() {
 
 
 
+ }
+
   cout <<"\n";
 
   //if the values is within then:
