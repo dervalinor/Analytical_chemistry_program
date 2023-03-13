@@ -13,7 +13,7 @@ vector<string> findFunctionalGroups(vector<double> peaks){
     for (double peak : peaks) {
         // Check if the peak falls within the range for Alkenes
         if (peak >= 2850 && peak <= 2970) {
-            functionalGroups.push_back("Alkenes");
+            functionalGroups.push_back("Alkenes"); 
         }
         
         // Check if the peak falls within any of the ranges for Alkenes (-C=C - H)
@@ -64,7 +64,7 @@ int main() {
 
     for(int i = 0; i < n; i++){
         cout << "Enter value #" << i << ":"; cin >> userInput; 
-        peaks.push_back(userInput);
+        peaks.push_back(userInput);//It makes the vector grow dynamically
     }
 
     testFunctionalGroups = findFunctionalGroups(peaks);

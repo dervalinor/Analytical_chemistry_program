@@ -52,19 +52,6 @@ double calibrate(double &sample, double a, double b){
   return result;
 }
 
-
-//function  Validation checks whether it is within the values of the calibration or not.
-//remember we calculate concentration from absorbance
-//first find the maximum and minimum value
-void min_max(const std::vector<double>& v, double& min_val, double& max_val) {
-    if (v.empty()) {
-        return;
-    }
-
-    min_val = *min_element(v.begin(), v.end());
-    max_val = *max_element(v.begin(), v.end());
-}
-
 bool validate_sample(double sample, double a, double b, double min_concentration, double max_concentration) {
   // Calculate the predicted concentration from the absorbance value
   double concentration = (sample - b) / a;
@@ -126,24 +113,22 @@ int main() {
   //by the linear calibration curve
   //Note: find the values min and max of the concentration
  
-  min_max(samples, min_val, max_val);
+
+  min_val = *min_element(x.begin(), x.end());
+  max_val = *max_element(x.begin(), x.end());
     
   //traverse the entire sample vector cycle
   for(int i = 0; i < m; i ++){
     sample = samples[i];  
     //validate each sample
-    if(validate_sample(sample, a, b, min_val, max_val) == true){
+    if(validate_sample(sample, a, b, min_val, max_val)){
       calibrated = calibrate(sample, a, b);
-      cout << "sample [" << i << "]" << calibrated << endl;
+      cout << "sample [" << i << "]: " << calibrated << endl;
     } else {
       cout << "Out of range" << endl;
     }
-    
   }
   cout <<"\n";
-
-  
-
 
   return 0;
 }

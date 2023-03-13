@@ -124,10 +124,6 @@ int main() {
   //a tolerance of the values predicted 
   //by the linear calibration curve
 
-
-
- }
-
   cout <<"\n";
 
   //if the values is within then:
