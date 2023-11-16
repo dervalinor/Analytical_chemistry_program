@@ -1,3 +1,6 @@
+/* Programa para calcular Vm y Km apartir de un curva de calibracion de la actividad catalitica
+de un enzima por medio de la ecuacion de ecuacion de Lineweaved-Bard*/
+
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -47,10 +50,31 @@ double r_squared(const std::vector<double>& x, const std::vector<double>& y, dou
 }
 
 int main() {
+
+    double intercept = 0.0; // Definition intercept - calculation of Vmax
+    double slope = 0.0; //definition of slope - calculation km
+
+
     try {
-        // Vectores de entrada
-        std::vector<double> v1 = {1, 2, 3, 4, 5}; //vector de concentraccion mantener con eje x
-        std::vector<double> v2 = {2, 3, 4, 5, 6}; //vector de la velocidad de la reaccion
+        //Para este caso se realizara la curva de calibracion
+        //de 1/V y 1/[S] de acuerdo a la ecuacion de Lineweaved-Bard
+        double n;
+
+        std::cout << "Amount of data: ";
+        std::cin >> n;
+
+        std::vector<double> v1(n); //vector de concentraccion mantener con eje x
+        std::vector<double> v2(n); //vector de la velocidad de la reaccion
+
+        std::cout << "substrate concentration: " << std::endl;
+        for (int i = 0; i < n; ++i) {
+            std::cout << "Concentration " << i + 1 <<" :"; std::cin >> v1[i];
+        }
+
+       std::cout << "reaction velocity: " << std::endl;
+        for(int i = 0; i < n; ++i){
+            std::cout << "Velocity " << i + 1  <<" :"; std::cin >> v2[i];
+        }
 
         // Verificar que los vectores sean del mismo tamaño
         if (v1.size() != v2.size()) {
@@ -62,7 +86,9 @@ int main() {
         std::vector<double> inv_v2 = inverse(v2);
 
         // Calcular la regresión lineal
-        auto [slope, intercept] = linear_regression(inv_v1, inv_v2);
+        std::pair<double, double> result = linear_regression(inv_v1, inv_v2);
+        slope = result.first;
+        intercept = result.second; // Asignar valor a intercept aquí
 
         // Calcular R²
         double r2 = r_squared(inv_v1, inv_v2, slope, intercept);
@@ -73,6 +99,17 @@ int main() {
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
     }
+
+    std::cout<< "Determination of Michaelis constant (Km) and maximum rate of reaction (Vmax)" << std::endl;
+
+    if (intercept != 0 && slope != 0) {
+    double Vmax = 1 / intercept;
+    std::cout << "Maximum rate of reaction (Vmax): " << Vmax << std::endl;
+    std::cout << "Michaelis constant (Km): " << slope*Vmax << std::endl;
+    } else {
+    std::cout << "Error, intercept or slope is zero" << std::endl;
+    }
+
 
     return 0;
 }
